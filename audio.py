@@ -72,7 +72,6 @@ def num_frames(length, fsize, fshift):
         M = (length + pad * 2 - fsize) // fshift + 2
     return M
 
-
 def pad_lr(x, fsize, fshift):
     """Compute left and right padding
     """
@@ -89,16 +88,15 @@ def librosa_pad_lr(x, fsize, fshift):
 # Conversions
 _mel_basis = None
 
-def _linear_to_mel(spectogram):
+def _linear_to_mel(spectrogram):
     global _mel_basis
     if _mel_basis is None:
         _mel_basis = _build_mel_basis()
-    return np.dot(_mel_basis, spectogram)
+    return np.dot(_mel_basis, spectrogram)
 
 def _build_mel_basis():
     assert hp.fmax <= hp.sample_rate // 2
-    return librosa.filters.mel(hp.sample_rate, hp.n_fft, n_mels=hp.num_mels,
-                               fmin=hp.fmin, fmax=hp.fmax)
+    return librosa.filters.mel(sr=hp.sample_rate, n_fft=hp.n_fft, n_mels=hp.num_mels, fmin=hp.fmin, fmax=hp.fmax)
 
 def _amp_to_db(x):
     min_level = np.exp(hp.min_level_db / 20 * np.log(10))
